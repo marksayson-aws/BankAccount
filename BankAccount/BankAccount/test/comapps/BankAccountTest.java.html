@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>BankAccountTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">BankAccountTest (Sep 23, 2025 11:27:48 AM)</a> &gt; <a href="../../index.html" class="el_group">BankAccount</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.source.html" class="el_package">comapps</a> &gt; <span class="el_source">BankAccountTest.java</span></div><h1>BankAccountTest.java</h1><pre class="source lang-java linenums">package comapps;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+
+@TestMethodOrder(OrderAnnotation.class)
+<span class="fc" id="L12">class BankAccountTest {</span>
+
+    /** The SavingsAccount instance used in the tests. */
+    private SavingsAccount sa;
+
+    /** valid deposit amount for tests. */
+    private static final int VALID_DEPOSIT = 1000;
+
+    /** valid withdrawal amount for tests. */
+    private static final int VALID_WITHDRAW = 500;
+
+    /** negative amount for testing invalid deposits/withdrawals. */
+    private static final int NEGATIVE_AMOUNT = -100;
+
+    /** excessive withdrawal amount for testing insufficient funds. */
+    private static final int EXCESS_WITHDRAW = 1500;
+
+    /** withdrawal amount used in multiple transactions tests. */
+    private static final int MULTI_TXN_WITHDRAW = 100;
+
+
+    @BeforeEach
+    void setUp() {
+<span class="fc" id="L35">        sa = new SavingsAccount(&quot;Betlog&quot;);</span>
+<span class="fc" id="L36">        System.out.println(&quot;[New Account Made]&quot;);</span>
+<span class="fc" id="L37">    }</span>
+
+    @Order(1)
+    @DisplayName(&quot;Test 1: Test account creation&quot;)
+    @Test
+    void testAccountCreation() {
+<span class="fc" id="L43">        assertEquals(&quot;Betlog&quot;, sa.getOwnerName());</span>
+<span class="fc" id="L44">        assertEquals(0, sa.getBalance());</span>
+<span class="fc" id="L45">        assertFalse(sa.isFrozen());</span>
+<span class="fc" id="L46">    }</span>
+
+    @Order(2)
+    @DisplayName(&quot;Test 2: Test deposit&quot;)
+    @Test
+    void testValidDeposit() {
+<span class="fc" id="L52">        sa.deposit(VALID_DEPOSIT);</span>
+<span class="fc" id="L53">        assertEquals(VALID_DEPOSIT, sa.getBalance());</span>
+<span class="fc" id="L54">    }</span>
+
+    @Order(3)
+    @DisplayName(&quot;Test 3: Deposit zero (ERROR)&quot;)
+    @Test
+    void testInvalidDepositZero() {
+<span class="fc" id="L60">        Exception exception = assertThrows(</span>
+<span class="pc" id="L61">                IllegalArgumentException.class, () -&gt; sa.deposit(0));</span>
+<span class="fc" id="L62">        System.out.println(exception.getMessage());</span>
+<span class="fc" id="L63">        assertEquals(&quot;Deposit must be greater than 0&quot;, exception.getMessage());</span>
+<span class="fc" id="L64">    }</span>
+
+    @Order(4)
+    @DisplayName(&quot;Test 4: Deposit a negative value (ERROR)&quot;)
+    @Test
+    void testInvalidDepositNegative() {
+<span class="fc" id="L70">        Exception exception = assertThrows(</span>
+<span class="fc" id="L71">                IllegalArgumentException.class,</span>
+<span class="pc" id="L72">                () -&gt; sa.deposit(NEGATIVE_AMOUNT));</span>
+<span class="fc" id="L73">        System.out.println(exception.getMessage());</span>
+<span class="fc" id="L74">        assertEquals(&quot;Deposit must be greater than 0&quot;, exception.getMessage());</span>
+<span class="fc" id="L75">    }</span>
+
+    @Order(5)
+    @DisplayName(&quot;Test 5: Test a valid withdraw&quot;)
+    @Test
+    void testValidWithdrawal() {
+<span class="fc" id="L81">        sa.deposit(VALID_DEPOSIT);</span>
+<span class="fc" id="L82">        sa.withdraw(VALID_WITHDRAW);</span>
+<span class="fc" id="L83">        assertEquals(VALID_DEPOSIT - VALID_WITHDRAW, sa.getBalance());</span>
+<span class="fc" id="L84">    }</span>
+
+    @Order(6)
+    @DisplayName(&quot;Test 6: Withdraw while funds are insufficient (ERROR)&quot;)
+    @Test
+    void testWithdrawalInsufficientFunds() {
+<span class="fc" id="L90">        sa.deposit(VALID_WITHDRAW);</span>
+<span class="fc" id="L91">        Exception exception = assertThrows(</span>
+<span class="fc" id="L92">                IllegalArgumentException.class,</span>
+<span class="pc" id="L93">                () -&gt; sa.withdraw(EXCESS_WITHDRAW));</span>
+<span class="fc" id="L94">        System.out.println(exception.getMessage());</span>
+<span class="fc" id="L95">        assertEquals(&quot;Withdraw amount is too high. &quot;</span>
+<span class="fc" id="L96">                + &quot;You don't have enough money.&quot;, exception.getMessage());</span>
+<span class="fc" id="L97">    }</span>
+
+    @Order(7)
+    @DisplayName(&quot;Test 7: Withdraw a negative amount (ERROR)&quot;)
+    @Test
+    void testWithdrawalNegative() {
+<span class="fc" id="L103">        Exception exception = assertThrows(</span>
+<span class="fc" id="L104">                IllegalArgumentException.class,</span>
+<span class="pc" id="L105">                () -&gt; sa.withdraw(NEGATIVE_AMOUNT));</span>
+<span class="fc" id="L106">        System.out.println(exception.getMessage());</span>
+<span class="fc" id="L107">        assertEquals(&quot;Amount to be withdrawn &quot;</span>
+<span class="fc" id="L108">                + &quot;must be greater than 0&quot;, exception.getMessage());</span>
+<span class="fc" id="L109">    }</span>
+
+    @Order(8)
+    @DisplayName(&quot;Test 8: Deposit to a frozen account (ERROR)&quot;)
+    @Test
+    void testDepositWhileFrozen() {
+<span class="fc" id="L115">        sa.freezeAccount();</span>
+<span class="fc" id="L116">        Exception exception = assertThrows(IllegalStateException.class,</span>
+<span class="pc" id="L117">                () -&gt; sa.deposit(VALID_DEPOSIT));</span>
+<span class="fc" id="L118">        System.out.println(exception.getMessage());</span>
+<span class="fc" id="L119">        assertEquals(&quot;Account is frozen&quot;, exception.getMessage());</span>
+<span class="fc" id="L120">    }</span>
+
+    @Order(9)
+    @DisplayName(&quot;Test 9: Withdraw from a frozen account (ERROR)&quot;)
+    @Test
+    void testWithdrawWhileFrozen() {
+<span class="fc" id="L126">        sa.deposit(VALID_WITHDRAW);</span>
+<span class="fc" id="L127">        sa.freezeAccount();</span>
+<span class="fc" id="L128">        Exception exception = assertThrows(IllegalStateException.class,</span>
+<span class="pc" id="L129">                () -&gt; sa.withdraw(VALID_WITHDRAW));</span>
+<span class="fc" id="L130">        System.out.println(exception.getMessage());</span>
+<span class="fc" id="L131">        assertEquals(&quot;Account is frozen&quot;, exception.getMessage());</span>
+<span class="fc" id="L132">    }</span>
+
+    @Order(10)
+    @DisplayName(&quot;Test 10: Unfreeze an account and withdraw&quot;)
+    @Test
+    void testUnfreezeAndWithdraw() {
+<span class="fc" id="L138">        sa.deposit(VALID_WITHDRAW);</span>
+<span class="fc" id="L139">        sa.freezeAccount();</span>
+<span class="fc" id="L140">        sa.unfreezeAccount();</span>
+<span class="fc" id="L141">        sa.withdraw(MULTI_TXN_WITHDRAW);</span>
+<span class="fc" id="L142">        assertEquals(VALID_WITHDRAW - MULTI_TXN_WITHDRAW, sa.getBalance());</span>
+<span class="fc" id="L143">        assertFalse(sa.isFrozen());</span>
+<span class="fc" id="L144">    }</span>
+
+    @Order(11)
+    @DisplayName(&quot;Test 11: Check if Account is Frozen&quot;)
+    @Test
+    void testCheckAccountIsFrozen() {
+<span class="fc" id="L150">        sa.freezeAccount();</span>
+<span class="fc" id="L151">        assertTrue(sa.isFrozen());</span>
+<span class="fc" id="L152">        sa.unfreezeAccount();</span>
+<span class="fc" id="L153">        assertFalse(sa.isFrozen());</span>
+<span class="fc" id="L154">    }</span>
+
+    @Order(12)
+    @DisplayName(&quot;Test 12: Show Balance After Multiple Transactions&quot;)
+    @Test
+    void testBalanceAfterMultipleTransactions() {
+<span class="fc" id="L160">        sa.deposit(VALID_DEPOSIT);</span>
+<span class="fc" id="L161">        sa.withdraw(VALID_WITHDRAW);</span>
+<span class="fc" id="L162">        sa.withdraw(MULTI_TXN_WITHDRAW);</span>
+<span class="fc" id="L163">        assertEquals(VALID_DEPOSIT - VALID_WITHDRAW - MULTI_TXN_WITHDRAW,</span>
+<span class="fc" id="L164">                sa.getBalance(), &quot;Balance should be Php 400&quot;);</span>
+<span class="fc" id="L165">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>BankAccountTest (Sep 23, 2025 11:27:48 AM)</div></body></html>

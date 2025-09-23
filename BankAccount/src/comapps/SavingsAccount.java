@@ -1,9 +1,7 @@
 package comapps;
 
 public class SavingsAccount extends AbstractBankAccount {
-    /**
-     * Holds the name of the owner’s account.
-     */
+    /** Holds the name of the owner’s account. */
     private String ownerName;
 
     // Initializes the ownerName.
