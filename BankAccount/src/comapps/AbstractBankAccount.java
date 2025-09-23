@@ -1,13 +1,9 @@
 package comapps;
 
 public abstract class AbstractBankAccount implements BankAccount {
-    /**
-     * variable balance stores balance linked to account.
-     */
+    /** variable balance stores balance linked to account. */
     private double balance;
-    /**
-     * variable isFrozen identifies if account is frozen or not.
-     */
+    /** variable isFrozen identifies if account is frozen or not. */
     private boolean isFrozen;
 
     // Initializes balance with 0, isFrozen with false.
@@ -23,21 +19,15 @@ public abstract class AbstractBankAccount implements BankAccount {
      * @param amount
      */
     public void deposit(final double amount) {
-        try {
-            if (isFrozen) {
-                throw new IllegalStateException("Account is frozen");
-            }
-            else if (amount <= 0) {
-                throw new IllegalArgumentException(
-                        "Deposit must be greater than 0");
-            }
-            else {
-                balance += amount;
-                System.out.println(
-                        "Deposit successful. Current Savings: " + balance);
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (isFrozen) {
+            throw new IllegalStateException("Account is frozen");
+        } else if (amount <= 0) {
+            throw new IllegalArgumentException(
+                    "Deposit must be greater than 0");
+        } else {
+            balance += amount;
+            System.out.println(
+                    "Deposit successful. Current Savings: " + balance);
         }
     }
 
@@ -48,28 +38,20 @@ public abstract class AbstractBankAccount implements BankAccount {
      * @param amount
      */
     public void withdraw(final double amount) {
-        try {
-            if (isFrozen) {
-                throw new IllegalStateException("Account is frozen");
-            }
-            else if (amount > balance) {
-                throw new IllegalArgumentException(
-                        "Withdraw amount is too high. "
-                        + "You don't have enough money.");
-            }
-            else if (amount <= 0) {
-                throw new IllegalArgumentException(
-                        "Amount to be withdrawn must be greater than 0");
-            }
-            else {
-                balance = balance - amount;
-                System.out.println(
-                        "Withdrawal succesful. Current Savings: " + balance);
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (isFrozen) {
+            throw new IllegalStateException("Account is frozen");
+        } else if (amount > balance) {
+            throw new IllegalArgumentException(
+                    "Withdraw amount is too high. "
+                    + "You don't have enough money.");
+        } else if (amount <= 0) {
+            throw new IllegalArgumentException(
+                    "Amount to be withdrawn must be greater than 0");
+        } else {
+            balance = balance - amount;
+            System.out.println(
+                    "Withdrawal successful. Current Savings: " + balance);
         }
-
     }
 
     /**
@@ -88,16 +70,12 @@ public abstract class AbstractBankAccount implements BankAccount {
         return isFrozen;
     }
 
-    /**
-     * Sets account to frozen.
-     */
+    /** Sets account to frozen. */
     void freezeAccount() {
         isFrozen = true;
     }
 
-    /**
-     * Sets account to unfrozen.
-     */
+    /** Sets account to unfrozen. */
     void unfreezeAccount() {
         isFrozen = false;
     }
