@@ -1,8 +1,9 @@
 package comapps;
 
 /**
- * Check style: Using .* on import should be avoided. 
+ * Check style: Using .* on import should be avoided.
  * Check style: Magic numbers on Orders(3-12).
+ * Code Reviewer: Christine Marasigan.
  */
 
 import static org.junit.jupiter.api.Assertions.*;
