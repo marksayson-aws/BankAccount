@@ -1,5 +1,10 @@
 package comapps;
 
+/**
+ * Check style: Using .* on import should be avoided. 
+ * Check style: Magic numbers on Orders(3-12).
+ */
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +38,7 @@ class BankAccountTest {
     @BeforeEach
     void setUp() {
         sa = new SavingsAccount("Betlog");
-        System.out.println("[New Account Made]");
+        System.out.println("[New Account Made for New Test Case]");
     }
 
     @Order(1)
@@ -41,6 +46,7 @@ class BankAccountTest {
     @Test
     void testAccountCreation() {
         assertEquals("Betlog", sa.getOwnerName());
+        System.out.println(sa.getOwnerName());
         assertEquals(0, sa.getBalance());
         assertFalse(sa.isFrozen());
     }
